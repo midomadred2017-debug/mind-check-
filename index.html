@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="MindCheck - أدوات للتأمل وفهم الذات.">
+<title>MindCheck</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7fb;color:#111827}
+.wrap{max-width:760px;margin:auto;padding:20px}.hero{background:#111827;color:white;border-radius:24px;padding:28px;margin-bottom:18px}
+h1{margin:0 0 8px;font-size:32px}.muted{opacity:.78}.card{background:white;border-radius:20px;padding:20px;margin:14px 0;box-shadow:0 6px 20px #0000000b}
+button{border:0;border-radius:14px;padding:13px 17px;background:#111827;color:white;font-size:16px;margin:5px;cursor:pointer}
+button.alt{background:#eef2f7;color:#111827}.q{font-weight:700;margin:18px 0 8px}.option{display:block;width:100%;text-align:right;background:#f3f4f6;color:#111827;margin:8px 0}.result{font-size:18px;line-height:1.7}
+.small{font-size:13px;color:#6b7280}
+</style></head>
+<body><div class="wrap">
+<div class="hero"><h1>🧠 MindCheck</h1><div class="muted" id="tag">افهم نفسك أكثر، خطوة بخطوة.</div>
+<button onclick="setLang('ar')">العربية</button><button onclick="setLang('en')">English</button></div>
+<div id="app"></div><div class="small">MindCheck أداة للتأمل وفهم الذات وليست أداة للتشخيص الطبي أو النفسي.</div>
+</div>
+<script>
+let lang='ar',answers=[];
+const d={
+ar:{start:'ابدأ اختبار فهم الذات',daily:'فكرة اليوم',library:'مكتبة MindCheck',premium:'Premium',
+qs:['عندما تواجه مشكلة، هل تميل إلى تحليلها بهدوء قبل التصرف؟','هل تفضّل التخطيط قبل اتخاذ قرارات مهمة؟','هل تستمد طاقتك من قضاء وقت مع الآخرين؟'],
+yes:'غالبًا',sometimes:'أحيانًا',no:'نادرًا',back:'رجوع',result:'نتيجتك',again:'إعادة الاختبار',
+intro:'اختبار قصير للتأمل في بعض أنماطك الشخصية. لا يمثل تشخيصًا نفسيًا.',
+dailyText:'ليس كل شعور يحتاج إلى قرار فوري. أحيانًا أفضل خطوة هي أن تتوقف قليلًا وتفهم ما تشعر به.',
+lib:['فهم العادات','التفكير واتخاذ القرار','التعامل مع الضغط','بناء وعي ذاتي'],
+premiumText:'النسخة Premium يمكن أن تتضمن اختبارات أعمق وتقارير موسعة ومحتوى إضافيًا. الدفع غير مفعّل في هذه النسخة. '},
+en:{start:'Start Self-Reflection Test',daily:'Daily Mind',library:'MindCheck Library',premium:'Premium',
+qs:['When you face a problem, do you tend to analyze it calmly before acting?','Do you prefer planning before making important decisions?','Do you get energy from spending time with other people?'],
+yes:'Often',sometimes:'Sometimes',no:'Rarely',back:'Back',result:'Your Result',again:'Retake',
+intro:'A short self-reflection quiz about some personal patterns. It is not a psychological diagnosis.',
+dailyText:'Not every feeling needs an immediate decision. Sometimes the best step is to pause and understand what you feel.',
+lib:['Understanding habits','Thinking and decisions','Handling pressure','Building self-awareness'],
+premiumText:'Premium may include deeper tests, expanded reports and extra content. Payments are not enabled in this version.'}
+};
+function setLang(x){lang=x;document.documentElement.lang=x;document.documentElement.dir=x==='ar'?'rtl':'ltr';home()}
+function home(){let x=d[lang];document.getElementById('tag').textContent=lang==='ar'?'افهم نفسك أكثر، خطوة بخطوة.':'Understand yourself, one step at a time.';
+document.getElementById('app').innerHTML=`<div class="card"><h2>${lang==='ar'?'الرئيسية':'Home'}</h2><p>${x.intro}</p><button onclick="start()">${x.start}</button></div>
+<div class="card"><h2>${x.daily}</h2><p>${x.dailyText}</p></div><div class="card"><h2>${x.library}</h2><ul>${x.lib.map(a=>'<li>'+a+'</li>').join('')}</ul></div>
+<div class="card"><h2>${x.premium}</h2><p>${x.premiumText}</p></div>`}
+function start(){answers=[];q(0)}
+function q(i){let x=d[lang],o=[x.yes,x.sometimes,x.no];document.getElementById('app').innerHTML=`<div class="card"><h2>${x.start}</h2><div class="small">${i+1} / ${x.qs.length}</div><p class="q">${x.qs[i]}</p>${o.map((a,j)=>`<button class="option" onclick="choose(${i},${j})">${a}</button>`).join('')}<button class="alt" onclick="home()">${x.back}</button></div>`}
+function choose(i,v){answers[i]=v;if(i+1<d[lang].qs.length)q(i+1);else result()}
+function result(){let x=d[lang],s=answers.reduce((a,b)=>a+(b===0?2:b===1?1:0),0),title,body;
+if(lang==='ar'){if(s>=5){title='تميل إلى التحليل والتنظيم';body='قد تكون لديك ميول واضحة للتفكير قبل التصرف وتنظيم قراراتك.'}else if(s>=3){title='شخصية متوازنة ومرنة';body='تجمع بين التفكير والتلقائية، وقد تتغير طريقتك حسب الموقف.'}else{title='تميل إلى التلقائية والتجربة';body='قد تفضّل التحرك وتجربة الأمور بدل الإفراط في التحليل.'}}
+else{if(s>=5){title='You lean toward analysis and structure';body='You may tend to think before acting and organize decisions.'}else if(s>=3){title='Balanced and flexible';body='You combine reflection with spontaneity and adapt to situations.'}else{title='You lean toward spontaneity and experience';body='You may prefer acting and learning through experience.'}}
+document.getElementById('app').innerHTML=`<div class="card result"><h2>${x.result}</h2><h3>${title}</h3><p>${body}</p><p class="small">${x.intro}</p><button onclick="start()">${x.again}</button><button class="alt" onclick="home()">${lang==='ar'?'الرئيسية':'Home'}</button></div>`}
+home();
+</script></body></html>
